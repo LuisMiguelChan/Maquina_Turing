@@ -1,12 +1,12 @@
 def turing_M (estado = None,
-              blanco = None,
+              vacio = None,
               reglas = [],
               arreglo = [],
-              final = None,
+              fin = None,
               pos = 0):
 
     st = estado
-    if not arreglo: arreglo = [blanco]
+    if not arreglo: arreglo = [vacio]
     if pos <0 : pos += len(arreglo)
     if pos >= len(arreglo) or pos < 0 : raise Error ("Se inicializa mal la posicion")
     
@@ -19,7 +19,7 @@ def turing_M (estado = None,
              else: print (v, end=" ")
         print()
         
-        if st == final: break
+        if st == fin: break
         if (st, arreglo[pos]) not in reglas: break
         
         (v1,dr,s1) = reglas [(st, arreglo[pos])]
@@ -27,21 +27,21 @@ def turing_M (estado = None,
     
         if dr == 'left':
             if pos > 0: pos -= 1
-            else: arreglo.insert(0, blanco)
+            else: arreglo.insert(0, vacio)
         if dr == 'right':
             pos += 1
-            if pos >= len(arreglo): arreglo.append(blanco)
+            if pos >= len(arreglo): arreglo.append(vacio)
         st = s1
 
 def duplica():
     print("Maquina de turing")
     print("Duplicación")
     print("Ingrese los caracteres a duplicar ej: aaa : ")
-    caracter = input("ingrese los caracteres: ")
+    caracter = input("Ingrese los caracteres: ")
     print("Resultado:")
-    turing_M (estado = 's1',
-                blanco = 'b',
-                arreglo = list(caracter),
+    turing_M (est = 's1',
+                white = 'b',
+                lista = list(caracter),
                 final = 's4',
                 reglas = map(tuple,
                               [
@@ -62,9 +62,9 @@ def adicion():
     print("suma 1 al valor binario ej: entrada 111=7 salida 1000=8")
     caracter = input("Ingrese el numero en binario: ")
     print("Resultado:")
-    turing_M (estado = 's1',
-                blanco = 'b',
-                arreglo = list(caracter),
+    turing_M (est = 's1',
+                white = 'b',
+                lista = list(caracter),
                 final = 's3',
                 reglas = map(tuple,
                             [
