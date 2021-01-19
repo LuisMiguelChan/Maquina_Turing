@@ -1,56 +1,92 @@
-def turing_M (state = None, #estados de la maquina de turing
-              blank = None, #simbolo blanco de el alfabeto dela cinta
-              rules = [],   #reglas de transicion
-              tape = [],    #cinta
-              final = None,  #estado valido y/o final
-              pos = 0):#posicion siguiente de la maquina de turing
+def turing_M (estado = None,
+              blanco = None,
+              reglas = [],
+              arreglo = [],
+              final = None,
+              pos = 0):
 
-    st = state
-    if not tape: tape = [blank]
-    if pos <0 : pos += len(tape)
-    if pos >= len(tape) or pos < 0 : raise Error ("Se inicializa mal la posicion")
+    st = estado
+    if not arreglo: arreglo = [blanco]
+    if pos <0 : pos += len(arreglo)
+    if pos >= len(arreglo) or pos < 0 : raise Error ("Se inicializa mal la posicion")
     
-    rules = dict(((s0, v0), (v1, dr, s1)) for (s0, v0, v1, dr, s1) in rules)
-    """
-Estado	Símbolo leído	Símbolo escrito	       Mov. 	Estado sig.
-  p(s0)	       1(v0)	         x(v1)         R(dr)	     p(s1)
-"""
+    reglas = dict(((s0, v0), (v1, dr, s1)) for (s0, v0, v1, dr, s1) in reglas)
+    
     while True:
         print (st, '\t', end=" ")
-        for i, v in enumerate(tape):
+        for i, v in enumerate(arreglo):
              if i==pos: print ("[%s]"%(v,),end=" ")
              else: print (v, end=" ")
         print()
         
         if st == final: break
-        if (st, tape[pos]) not in rules: break
+        if (st, arreglo[pos]) not in reglas: break
         
-        (v1,dr,s1) = rules [(st, tape[pos])]
-        tape[pos]=v1 #rescribe el simbolo de la cinta
+        (v1,dr,s1) = reglas [(st, arreglo[pos])]
+        arreglo[pos]=v1
     
-    #movimiento del cabezal
         if dr == 'left':
             if pos > 0: pos -= 1
-            else: tape.insert(0, blank)
+            else: arreglo.insert(0, blanco)
         if dr == 'right':
             pos += 1
-            if pos >= len(tape): tape.append(blank)
+            if pos >= len(arreglo): arreglo.append(blanco)
         st = s1
 
-print("Maquina de turing Duplicacion")
-turing_M (state = 's1', #estado inicial de la maquina de turing
-              blank = 'b', #simbolo blanco de el alfabeto dela cinta
-              tape = list("aaaa"),#inserta los elementos en la cinta
-              final = 's4',  #estado valido y/o final
-              rules = map(tuple,#reglas de transicion
-                          [
-                          "s1 a 1 right s1".split(),
-                          "s1 b b left s2".split(),
-                          "s2 a a left s2".split(),
-                          "s2 1 a right s3".split(),
-                          "s3 a a right s3".split(),
-                          "s3 b a left s2".split(),
-                          "s2 b b rigth s4".split(),
-                          ]   
-                         )
-             )
+def duplica():
+    print("Maquina de turing")
+    print("Duplicación")
+    print("Ingrese los caracteres a duplicar ej: aaa : ")
+    caracter = input("ingrese los caracteres: ")
+    print("Resultado:")
+    turing_M (estado = 's1',
+                blanco = 'b',
+                arreglo = list(caracter),
+                final = 's4',
+                reglas = map(tuple,
+                              [
+                            "s1 a 1 right s1".split(),
+                            "s1 b b left s2".split(),
+                            "s2 a a left s2".split(),
+                            "s2 1 a right s3".split(),
+                            "s3 a a right s3".split(),
+                            "s3 b a left s2".split(),
+                            "s2 b b right s4".split(),
+                            ]   
+                            )
+                )
+
+def adicion():
+    print()
+    print("Maquina de turing")
+    print("suma 1 al valor binario ej: entrada 111=7 salida 1000=8")
+    caracter = input("Ingrese el numero en binario: ")
+    print("Resultado:")
+    turing_M (estado = 's1',
+                blanco = 'b',
+                arreglo = list(caracter),
+                final = 's3',
+                reglas = map(tuple,
+                            [
+                            "s1 1 1 right s1".split(),
+                            "s1 0 0 right s1".split(),
+                            "s1 b b left s2".split(),
+                            "s2 1 0 left s2".split(),
+                            "s2 0 1 right s3".split(),
+                            "s2 0 1 left s3".split(),
+                            "s2 b 1 left  s3".split(),
+                            ]   
+                            )
+                )
+
+while True:
+    print("1 = duplicacion de caracteres")
+    print("2 = suma un 1 a un binario")
+    print("0 = salir")
+    resp = int(input("Agregue una respuesta: "))
+    if resp == 1:
+        duplica()
+    if resp == 2:
+        adicion()
+    if resp == 0:
+        break
