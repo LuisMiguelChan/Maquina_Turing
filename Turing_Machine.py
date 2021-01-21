@@ -1,30 +1,34 @@
-def turing_M (estado = None,
-              vacio = None,
-              reglas = [],
-              arreglo = [],
-              fin = None,
-              pos = 0):
+#definicion del metodo
+def turing_M (estado = None,#Estado inicial
+              vacio = None,#Vacio
+              reglas = [],#Reglas del automata
+              arreglo = [],#Valores de entrada
+              fin = None,#Estado final
+              pos = 0):#Posicion
 
     st = estado
     if not arreglo: arreglo = [vacio]
-    if pos <0 : pos += len(arreglo)
-    if pos >= len(arreglo) or pos < 0 : raise Error ("Se inicializa mal la posicion")
+    if pos <0 : pos += len(arreglo)#Movimiento de la posicion en las entradas
+    if pos >= len(arreglo) or pos < 0 : raise Error ("Se inicializa mal la posicion") #Error cuando la posicion inicia mal
     
-    reglas = dict(((s0, v0), (v1, dr, s1)) for (s0, v0, v1, dr, s1) in reglas)
+    reglas = dict(((s0, v0), (v1, dr, s1)) for (s0, v0, v1, dr, s1) in reglas) #Se evalua cada regla del automata
     
     while True:
-        print (st, '\t', end=" ")
-        for i, v in enumerate(arreglo):
+        print (st, '\t', end=" ")#Impresion con tabulacion
+        for i, v in enumerate(arreglo):#Lectura de cada caracter de la lista
              if i==pos: print ("[%s]"%(v,),end=" ")
              else: print (v, end=" ")
         print()
         
-        if st == fin: break
-        if (st, arreglo[pos]) not in reglas: break
+        if st == fin: break#Cuando la posicion llega al estado final termina
+        if (st, arreglo[pos]) not in reglas: break#Termina de revisar las reglas
         
+        #Valida las reglas dependiendo la posicion del puntero
         (v1,dr,s1) = reglas [(st, arreglo[pos])]
         arreglo[pos]=v1
-    
+
+        #Se define como se debe posicionar el puntero
+        #Ya sea un movimiento por la izquierda o la derecha
         if dr == 'left':
             if pos > 0: pos -= 1
             else: arreglo.insert(0, vacio)
@@ -33,16 +37,18 @@ def turing_M (estado = None,
             if pos >= len(arreglo): arreglo.append(vacio)
         st = s1
 
+#Definicion del metodo
 def duplica():
     print("Maquina de turing")
     print("Duplicación")
     print("Ingrese los caracteres a duplicar ej: aaa : ")
     caracter = input("Ingrese los caracteres: ")
     print("Resultado:")
-    turing_M (est = 's1',
-                white = 'b',
-                lista = list(caracter),
-                final = 's4',
+    #Llamada al metodo
+    turing_M (estado = 's1',#Estado incial
+                vacio = 'b',#Caracter del vacio
+                arreglo = list(caracter),#Valores de entrada
+                fin = 's4',#Estado final
                 reglas = map(tuple,
                               [
                             "s1 a 1 right s1".split(),
@@ -53,19 +59,21 @@ def duplica():
                             "s3 b a left s2".split(),
                             "s2 b b right s4".split(),
                             ]   
-                            )
+                            )#Reglas del automata
                 )
 
+#Definicion del metodo
 def adicion():
     print()
     print("Maquina de turing")
     print("suma 1 al valor binario ej: entrada 111=7 salida 1000=8")
     caracter = input("Ingrese el numero en binario: ")
     print("Resultado:")
-    turing_M (est = 's1',
-                white = 'b',
-                lista = list(caracter),
-                final = 's3',
+    #Llamada al metodo
+    turing_M (estado = 's1',#Estado inicial
+                vacio = 'b',#Caracter del vacio
+                arreglo = list(caracter),#Valores de entrada
+                fin = 's3',#Estado final
                 reglas = map(tuple,
                             [
                             "s1 1 1 right s1".split(),
@@ -76,17 +84,17 @@ def adicion():
                             "s2 0 1 left s3".split(),
                             "s2 b 1 left  s3".split(),
                             ]   
-                            )
+                            )#Reglas del automata
                 )
 
 while True:
     print("1 = duplicacion de caracteres")
     print("2 = suma un 1 a un binario")
     print("0 = salir")
-    resp = int(input("Agregue una respuesta: "))
+    resp = int(input("Agregue una respuesta: "))#Entrada
     if resp == 1:
-        duplica()
+        duplica()#Llamada al metodo
     if resp == 2:
-        adicion()
+        adicion()#Llamada al metodo
     if resp == 0:
         break
